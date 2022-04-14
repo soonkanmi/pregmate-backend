@@ -4,7 +4,7 @@
     </div>
 
     <div class="mt-8 text-2xl">
-        Welcome to your Jetstream application!
+        Welcome to {{ auth()->user()->name }}
     </div>
 
     <div class="mt-6 text-gray-500">
@@ -14,7 +14,7 @@
         ecosystem to be a breath of fresh air. We hope you love it.
     </div>
 </div>
-
+{{--
 <div class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2">
     <div class="p-6">
         <div class="flex items-center">
@@ -87,4 +87,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
