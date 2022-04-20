@@ -27,6 +27,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'profile_photo_path',
+        'status',
+        'phone'
     ];
 
     /**
@@ -58,4 +62,24 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function scopeIsUser($query)
+    {
+        return $query->where('role', 'user');
+    }
+
+    public function scopeIsDoctor($query)
+    {
+        return $query->where('role', 'doctor');
+    }
+
+    public function scopeIsAdmin($query)
+    {
+        return $query->where('role', 'admin');
+    }
+
+    public function scopeIsActive($query)
+    {
+        return $query->where('status', 1);
+    }
 }

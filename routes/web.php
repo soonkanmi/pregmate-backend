@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\UserController;
+use App\Http\Livewire\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,5 +27,5 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
-    Route::get('/users', [UserController::class, 'index'])->name('users.list');
+    Route::get('/users', User::class)->name('users.list');
 });
