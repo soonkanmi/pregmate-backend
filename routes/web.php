@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Livewire\Doctor;
 use App\Http\Livewire\User;
 use Illuminate\Support\Facades\Route;
 
@@ -28,4 +29,5 @@ Route::middleware([
     })->name('dashboard');
 
     Route::get('/users', User::class)->name('users.list');
+    Route::get('/doctors', Doctor::class)->name('doctors.list');
 });
