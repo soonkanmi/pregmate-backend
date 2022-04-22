@@ -7,9 +7,8 @@ use Livewire\Component;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use App\Notifications\UserWelcomeEmailNotification;
-use Exception;
 
-class Doctor extends Component
+class Administrator extends Component
 {
     public $users, $name, $email, $phone, $status, $user_id;
     public $isModalOpen = 0;
@@ -19,8 +18,8 @@ class Doctor extends Component
 
     public function render()
     {
-        $this->users = User::isDoctor()->get();
-        return view('livewire.doctor.index');
+        $this->users = User::isAdmin()->get();
+        return view('livewire.administrator.index');
     }
 
     public function create()
@@ -77,10 +76,10 @@ class Doctor extends Component
 
         try {
             $user->notify(new UserWelcomeEmailNotification($user, $password));
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
 
         } finally {
-            session()->flash('message', 'Doctor created.');
+            session()->flash('message', 'Administrator created.');
 
             $this->closeModalPopover();
             $this->resetCreateForm();
@@ -105,7 +104,7 @@ class Doctor extends Component
             'status' => $this->status,
         ]);
 
-        session()->flash('message', 'Doctor updated.');
+        session()->flash('message', 'Administrator updated.');
 
         $this->closeModalPopover();
         $this->resetCreateForm();
@@ -138,7 +137,7 @@ class Doctor extends Component
     public function delete($id)
     {
         User::find($id)->delete();
-        session()->flash('message', 'Doctor deleted.');
+        session()->flash('message', 'Administrator deleted.');
 
         $this->confirmRecordId = null;
         $this->confirmingDelete = false;

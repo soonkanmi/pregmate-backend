@@ -16,16 +16,27 @@
                         {{ __('Dashboard') }}
                     </x-jet-nav-link>
                 </div>
+
+                @if (auth()->user()->role === 'admin' || auth()->user()->role === 'doctor')
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-jet-nav-link href="{{ route('users.list') }}" :active="request()->routeIs('users.list')">
                         {{ __('Users') }}
                     </x-jet-nav-link>
                 </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-jet-nav-link href="{{ route('doctors.list') }}" :active="request()->routeIs('doctors.list')">
-                        {{ __('Doctors') }}
-                    </x-jet-nav-link>
-                </div>
+                @endif
+
+                @if (auth()->user()->role === 'admin')
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-jet-nav-link href="{{ route('doctors.list') }}" :active="request()->routeIs('doctors.list')">
+                            {{ __('Doctors') }}
+                        </x-jet-nav-link>
+                    </div>
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-jet-nav-link href="{{ route('administrators.list') }}" :active="request()->routeIs('administrators.list')">
+                            {{ __('Administrator') }}
+                        </x-jet-nav-link>
+                    </div>
+                @endif
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ml-6">
@@ -108,10 +119,10 @@
             @endif
 
             @if (auth()->user()->role === 'admin')
-                <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                <x-jet-responsive-nav-link href="{{ route('doctors.list') }}" :active="request()->routeIs('doctors.list')">
                     {{ __('Doctors') }}
                 </x-jet-responsive-nav-link>
-                <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                <x-jet-responsive-nav-link href="{{ route('administrators.list') }}" :active="request()->routeIs('administrators.list')">
                     {{ __('Admin') }}
                 </x-jet-responsive-nav-link>
             @endif
