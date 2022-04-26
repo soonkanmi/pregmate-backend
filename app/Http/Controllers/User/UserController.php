@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
+use App\Models\UserMedicalInformation;
 use App\Models\UserObstetricalInformation;
 use App\Models\UserPersonalInformation;
 
@@ -48,7 +49,7 @@ class UserController extends Controller
         ]);
 
         $user = User::isActive()->isUser()
-            ->with(['personal_information', 'obstetrical_information'])
+            ->with(['personal_information', 'obstetrical_information', 'medical_information'])
             ->find(auth()->id());
 
         $user->phone = $request->input('phone');
@@ -84,14 +85,39 @@ class UserController extends Controller
         ]);
 
         $user = User::isActive()->isUser()
-            ->with(['personal_information', 'obstetrical_information'])
+            ->with(['personal_information', 'obstetrical_information', 'medical_information'])
             ->find(auth()->id());
-
-        $user->phone = $request->input('phone');
-        $user->save();
 
         return response()->json([
             'message' => 'Obstetrical information updated successfully',
+            'data' => $user
+        ]);
+    }
+
+    public function updateMedicalInformation(Request $request)
+    {
+        $this->validate($request, [
+            'bloodgroup' => 'required',
+            'rhesus_factor' => 'required'
+        ],[
+            'bloodgroup' => 'Blood Group is required',
+            'rhesus_factor' => 'Rhesus Factor is required',
+        ]);
+
+        UserMedicalInformation::updateOrCreate([
+            'user_id' => auth()->id()
+        ], [
+            'bloodgroup' => $request->input('bloodgroup'),
+            'rhesus_factor' => $request->input('rhesus_factor'),
+            'allergies' => $request->input('allergies'),
+        ]);
+
+        $user = User::isActive()->isUser()
+            ->with(['personal_information', 'obstetrical_information', 'medical_information'])
+            ->find(auth()->id());
+
+        return response()->json([
+            'message' => 'Medical information updated successfully',
             'data' => $user
         ]);
     }

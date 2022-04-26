@@ -27,6 +27,7 @@ Route::group([
 ], function () {
     Route::post('/update-personal-information', [UserController::class, 'updatePersonalInformation']);
     Route::post('/update-obstetrical-information', [UserController::class, 'updateObstetricalInformation']);
+    Route::post('/update-medical-information', [UserController::class, 'updateMedicalInformation']);
 });
 
 Route::group([

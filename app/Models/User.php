@@ -93,4 +93,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserObstetricalInformation::class);
     }
+
+    public function medical_information(): HasOne
+    {
+        return $this->hasOne(UserMedicalInformation::class);
+    }
 }
