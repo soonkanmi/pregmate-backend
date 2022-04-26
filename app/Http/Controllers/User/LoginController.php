@@ -37,7 +37,8 @@ class LoginController extends Controller
                 'personal_information',
                 'obstetrical_information',
                 'medical_information',
-                'pregnancy_information'
+                'pregnancy_information',
+                'vitals'
             ])->isUser()->isActive()
             ->where('email', $request->input('email'))
             ->first();

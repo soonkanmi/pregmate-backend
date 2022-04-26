@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Models\UserMedicalInformation;
 use App\Models\UserPersonalInformation;
 use App\Models\UserObstetricalInformation;
+use App\Models\UserPregnancyInfo;
 
 class UserController extends Controller
 {
@@ -131,13 +132,14 @@ class UserController extends Controller
             'date_concieved' => 'Date Concieved is required',
         ]);
 
-        UserMedicalInformation::updateOrCreate([
+        UserPregnancyInfo::updateOrCreate([
             'user_id' => auth()->id()
         ], [
-            'date_concieved' => $request->input('date_concieved'),
-            'first_trimester_ends' => $request->input('first_trimester_ends'),
-            'second_trimester_ends' => $request->input('second_trimester_ends'),
-            'estimated_due_date' => $request->input('estimated_due_date')
+            'date_concieved' => (new Carbon($request->input('date_concieved')))->format('Y-m-d'),
+            'first_trimester_ends' => (new Carbon($request->input('first_trimester_ends')))->format('Y-m-d'),
+            'second_trimester_ends' => (new Carbon($request->input('second_trimester_ends')))->format('Y-m-d'),
+            'estimated_due_date' => (new Carbon($request->input('estimated_due_date')))->format('Y-m-d'),
+            'delivery_status' => false
         ]);
 
         $user = User::isActive()->isUser()
