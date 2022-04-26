@@ -28,6 +28,9 @@ Route::group([
     Route::post('/update-personal-information', [UserController::class, 'updatePersonalInformation']);
     Route::post('/update-obstetrical-information', [UserController::class, 'updateObstetricalInformation']);
     Route::post('/update-medical-information', [UserController::class, 'updateMedicalInformation']);
+    Route::post('/save-pregnancy-information', [UserController::class, 'savePregnancyInformation']);
+    Route::post('/record-vitals', [UserController::class, 'recordVitals']);
+    Route::post('/get-vitals', [UserController::class, 'getVitals']);
 });
 
 Route::group([

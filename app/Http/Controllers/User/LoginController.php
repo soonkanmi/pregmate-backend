@@ -35,7 +35,9 @@ class LoginController extends Controller
 
         $user = User::with([
                 'personal_information',
-                'obstetrical_information'
+                'obstetrical_information',
+                'medical_information',
+                'pregnancy_information'
             ])->isUser()->isActive()
             ->where('email', $request->input('email'))
             ->first();

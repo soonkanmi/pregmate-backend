@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\User;
 
 use App\Models\User;
+use App\Models\UserVital;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
 use App\Models\UserMedicalInformation;
-use App\Models\UserObstetricalInformation;
 use App\Models\UserPersonalInformation;
+use App\Models\UserObstetricalInformation;
 
 class UserController extends Controller
 {
@@ -49,7 +50,7 @@ class UserController extends Controller
         ]);
 
         $user = User::isActive()->isUser()
-            ->with(['personal_information', 'obstetrical_information', 'medical_information'])
+            ->with(['personal_information', 'obstetrical_information', 'medical_information', 'pregnancy_information'])
             ->find(auth()->id());
 
         $user->phone = $request->input('phone');
@@ -85,7 +86,7 @@ class UserController extends Controller
         ]);
 
         $user = User::isActive()->isUser()
-            ->with(['personal_information', 'obstetrical_information', 'medical_information'])
+            ->with(['personal_information', 'obstetrical_information', 'medical_information', 'pregnancy_information'])
             ->find(auth()->id());
 
         return response()->json([
@@ -113,12 +114,86 @@ class UserController extends Controller
         ]);
 
         $user = User::isActive()->isUser()
-            ->with(['personal_information', 'obstetrical_information', 'medical_information'])
+            ->with(['personal_information', 'obstetrical_information', 'medical_information', 'pregnancy_information'])
             ->find(auth()->id());
 
         return response()->json([
             'message' => 'Medical information updated successfully',
             'data' => $user
+        ]);
+    }
+
+    public function savePregnancyInformation(Request $request)
+    {
+        $this->validate($request, [
+            'date_concieved' => 'required',
+        ],[
+            'date_concieved' => 'Date Concieved is required',
+        ]);
+
+        UserMedicalInformation::updateOrCreate([
+            'user_id' => auth()->id()
+        ], [
+            'date_concieved' => $request->input('date_concieved'),
+            'first_trimester_ends' => $request->input('first_trimester_ends'),
+            'second_trimester_ends' => $request->input('second_trimester_ends'),
+            'estimated_due_date' => $request->input('estimated_due_date')
+        ]);
+
+        $user = User::isActive()->isUser()
+            ->with(['personal_information', 'obstetrical_information', 'medical_information', 'pregnancy_information'])
+            ->find(auth()->id());
+
+        return response()->json([
+            'message' => 'Pregnancy information saved successfully',
+            'data' => $user
+        ]);
+    }
+
+    public function recordVitals(Request $request)
+    {
+        $this->validate($request, [
+            'weight' => 'required',
+            'blood_pressure_systolic' => 'required',
+            'blood_pressure_diastolic' => 'required',
+            'temperature' => 'required',
+            'fluid_intake' => 'required',
+            'drug_intake' => 'required'
+        ],[
+            'weight' => 'Weidht is required',
+            'blood_pressure_systolic' => 'Blood Pressure systolic is required',
+            'blood_pressure_diastolic' => 'Blood Pressure diastolic is required',
+            'temperature' => 'Temperature is required',
+            'fluid_intake' => 'Fluid intake is required',
+            'drug_intake' => 'Drug intake is required'
+        ]);
+
+        UserVital::updateOrCreate([
+            'user_id' => auth()->id()
+        ], [
+            'weight' => $request->input('weight'),
+            'blood_pressure_systolic' => $request->input('blood_pressure_systolic'),
+            'blood_pressure_diastolic' => $request->input('blood_pressure_diastolic'),
+            'temperature' => $request->input('temperature'),
+            'fluid_intake' => $request->input('fluid_intake'),
+            'drug_intake' => $request->input('drug_intake')
+        ]);
+
+        $vitals = UserVital::whereUserId(auth()->id())->get();
+
+        return response()->json([
+            'message' => 'Vitals recorded successfully',
+            'data' => $vitals
+        ]);
+    }
+
+    public function getVitals(Request $request)
+    {
+        $vitals = UserVital::whereUserId(auth()->id())->get();
+
+        return response()->json([
+            'message' => 'Vitals loaded successfully',
+            'data' => $vitals
         ]);
     }
 }
