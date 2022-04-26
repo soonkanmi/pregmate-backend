@@ -1,8 +1,10 @@
 <?php
 
-use App\Http\Controllers\User\RegistrationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\User\LoginController;
+use App\Http\Controllers\User\RegistrationController;
+use App\Http\Controllers\User\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,13 +21,17 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['middleware' => 'auth:sanctum'], function () {
-
+Route::group([
+    'prefix' => 'user',
+    'middleware' => 'auth:sanctum'
+], function () {
+    Route::post('/update-personal-information', [UserController::class, 'updatePersonalInformation']);
 });
 
 Route::group([
-    'prefix' => 'user'
+    'prefix' => 'user',
+    'middleware' => 'guest'
 ], function () {
-    Route::post('/register', [RegistrationController::class, 'store'])
-        ->middleware(['guest']);
+    Route::post('/register', [RegistrationController::class, 'store']);
+    Route::post('/login', [LoginController::class, 'login']);
 });
