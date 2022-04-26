@@ -88,4 +88,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserPersonalInformation::class);
     }
+
+    public function obstetrical_information(): HasOne
+    {
+        return $this->hasOne(UserObstetricalInformation::class);
+    }
 }

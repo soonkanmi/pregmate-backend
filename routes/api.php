@@ -26,6 +26,7 @@ Route::group([
     'middleware' => 'auth:sanctum'
 ], function () {
     Route::post('/update-personal-information', [UserController::class, 'updatePersonalInformation']);
+    Route::post('/update-obstetrical-information', [UserController::class, 'updateObstetricalInformation']);
 });
 
 Route::group([

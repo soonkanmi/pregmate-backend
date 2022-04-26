@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
+use App\Models\UserObstetricalInformation;
 use App\Models\UserPersonalInformation;
 
 class UserController extends Controller
@@ -47,7 +48,7 @@ class UserController extends Controller
         ]);
 
         $user = User::isActive()->isUser()
-            ->with(['personal_information'])
+            ->with(['personal_information', 'obstetrical_information'])
             ->find(auth()->id());
 
         $user->phone = $request->input('phone');
@@ -55,6 +56,42 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'Personal information updated successfully',
+            'data' => $user
+        ]);
+    }
+
+    public function updateObstetricalInformation(Request $request)
+    {
+        $this->validate($request, [
+            'previous_pregnancies' => 'required',
+            'liveborns' => 'required',
+            'stillbirths' => 'required',
+            'previous_mode_of_delivery' => 'required'
+        ], [
+            'previous_pregnancies' => 'No. of pevious pregnancies is required',
+            'liveborns' => 'No. of live borns is required',
+            'stillbirths' => 'No. of still  births is required',
+            'previous_mode_of_delivery' => 'Previous mode of delivery is required'
+        ]);
+
+        UserObstetricalInformation::updateOrCreate([
+            'user_id' => auth()->id()
+        ], [
+            'previous_pregnancies' => $request->input('previous_pregnancies'),
+            'liveborns' => $request->input('liveborns'),
+            'stillbirths' => $request->input('stillbirths'),
+            'previous_mode_of_delivery' => $request->input('previous_mode_of_delivery')
+        ]);
+
+        $user = User::isActive()->isUser()
+            ->with(['personal_information', 'obstetrical_information'])
+            ->find(auth()->id());
+
+        $user->phone = $request->input('phone');
+        $user->save();
+
+        return response()->json([
+            'message' => 'Obstetrical information updated successfully',
             'data' => $user
         ]);
     }

@@ -20,16 +20,6 @@ class LoginController extends Controller
             'password' => 'Password is required to login'
         ]);
 
-        $user = User::with(['personal_information'])->isUser()->isActive()
-            ->where('email', $request->input('email'))
-            ->first();
-
-        // if (!$user || !Hash::check($request->input('password'), $user->makeVisible(['password'])->password)) {
-        //     return response()->json([
-        //         'message' => 'Authentication Error'
-        //     ], 412);
-        // }
-
         if (!Auth::guard('web')->attempt([
             'email' => $request->input('email'),
             'password' => $request->input('password'),
@@ -43,12 +33,12 @@ class LoginController extends Controller
             ], 412);
         }
 
-        // if ($this->guard->attempt(
-        //     $request->only(Fortify::username(), 'password'),
-        //     $request->boolean('remember'))
-        // ) {
-        //     return $next($request);
-        // }
+        $user = User::with([
+                'personal_information',
+                'obstetrical_information'
+            ])->isUser()->isActive()
+            ->where('email', $request->input('email'))
+            ->first();
 
         return response()->json([
             'message' => 'Authentication Successful',
