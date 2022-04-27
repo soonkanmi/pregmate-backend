@@ -6,11 +6,12 @@ use App\Models\User;
 use App\Models\UserVital;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use App\Models\UserPregnancyInfo;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Models\UserMedicalInformation;
 use App\Models\UserPersonalInformation;
 use App\Models\UserObstetricalInformation;
-use App\Models\UserPregnancyInfo;
 
 class UserController extends Controller
 {
@@ -54,8 +55,18 @@ class UserController extends Controller
             ->with(['personal_information', 'obstetrical_information', 'medical_information', 'pregnancy_information'])
             ->find(auth()->id());
 
-        $user->phone = $request->input('phone');
-        $user->save();
+        $user->update([
+            'name' => $request->input('name'),
+            'phone' => $request->input('phone')
+        ]);
+
+        // if ($user->name !== $request->input('name')) {
+        //     $user-> = ;
+        //     $user->save();
+        // }
+
+        // $user->phone = $request->input('phone');
+        // $user->save();
 
         return response()->json([
             'message' => 'Personal information updated successfully',
@@ -192,6 +203,14 @@ class UserController extends Controller
         return response()->json([
             'message' => 'Vitals loaded successfully',
             'data' => $vitals
+        ]);
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::guard('web')->logout();
+        return response()->json([
+            'message' => 'Logout successful'
         ]);
     }
 }

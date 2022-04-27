@@ -33,6 +33,8 @@ Route::group([
     Route::post('/save-pregnancy-information', [UserController::class, 'savePregnancyInformation']);
     Route::post('/record-vitals', [UserController::class, 'recordVitals']);
     Route::get('/get-vitals', [UserController::class, 'getVitals']);
+
+    Route::get('/logout', [UserController::class, 'logout']);
 });
 
 Route::group([
