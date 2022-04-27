@@ -17,20 +17,22 @@ use App\Http\Controllers\User\UserController;
 |
 */
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 Route::group([
     'prefix' => 'user',
     'middleware' => 'auth:sanctum'
 ], function () {
+    Route::get('/profile', [UserController::class, 'profile']);
+
     Route::post('/update-personal-information', [UserController::class, 'updatePersonalInformation']);
     Route::post('/update-obstetrical-information', [UserController::class, 'updateObstetricalInformation']);
     Route::post('/update-medical-information', [UserController::class, 'updateMedicalInformation']);
     Route::post('/save-pregnancy-information', [UserController::class, 'savePregnancyInformation']);
     Route::post('/record-vitals', [UserController::class, 'recordVitals']);
-    Route::post('/get-vitals', [UserController::class, 'getVitals']);
+    Route::get('/get-vitals', [UserController::class, 'getVitals']);
 });
 
 Route::group([

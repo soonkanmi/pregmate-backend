@@ -17,7 +17,7 @@ class UserController extends Controller
     public function profile(Request $request)
     {
         $user = User::isActive()->isUser()
-            ->with(['personal_information'])
+            ->with(['personal_information', 'obstetrical_information', 'medical_information', 'pregnancy_information'])
             ->find(auth()->id());
 
         return response()->json([
@@ -159,26 +159,22 @@ class UserController extends Controller
             'blood_pressure_systolic' => 'required',
             'blood_pressure_diastolic' => 'required',
             'temperature' => 'required',
-            'fluid_intake' => 'required',
-            'drug_intake' => 'required'
+            'fluid_intake' => 'required'
         ],[
             'weight' => 'Weidht is required',
             'blood_pressure_systolic' => 'Blood Pressure systolic is required',
             'blood_pressure_diastolic' => 'Blood Pressure diastolic is required',
             'temperature' => 'Temperature is required',
-            'fluid_intake' => 'Fluid intake is required',
-            'drug_intake' => 'Drug intake is required'
+            'fluid_intake' => 'Fluid intake is required'
         ]);
 
-        UserVital::updateOrCreate([
-            'user_id' => auth()->id()
-        ], [
+        auth()->user()->vitals()->create([
             'weight' => $request->input('weight'),
             'blood_pressure_systolic' => $request->input('blood_pressure_systolic'),
             'blood_pressure_diastolic' => $request->input('blood_pressure_diastolic'),
             'temperature' => $request->input('temperature'),
             'fluid_intake' => $request->input('fluid_intake'),
-            'drug_intake' => $request->input('drug_intake')
+            'drug_intake' => $request->input('drug_intake') ?? 0
         ]);
 
         $vitals = UserVital::whereUserId(auth()->id())->get();

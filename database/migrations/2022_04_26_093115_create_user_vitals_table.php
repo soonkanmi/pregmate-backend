@@ -19,12 +19,12 @@ return new class extends Migration
 
             $table->foreignIdFor(User::class);
 
-            $table->unsignedTinyInteger('weight')->default(0);
-            $table->unsignedTinyInteger('blood_pressure_systolic')->default(0);
-            $table->unsignedTinyInteger('blood_pressure_diastolic')->default(0);
-            $table->unsignedTinyInteger('temperature')->default(0);
-            $table->unsignedTinyInteger('fluid_intake')->default(0);
-            $table->unsignedTinyInteger('drug_intake')->default(0);
+            $table->double('weight', 10)->default(0);
+            $table->unsignedInteger('blood_pressure_systolic')->default(0);
+            $table->unsignedInteger('blood_pressure_diastolic')->default(0);
+            $table->double('temperature', 10)->default(0);
+            $table->double('fluid_intake', 10)->default(0);
+            $table->unsignedInteger('drug_intake')->default(0);
 
             $table->timestamps();
         });
