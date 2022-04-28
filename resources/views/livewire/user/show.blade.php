@@ -68,6 +68,7 @@
 
             <x-jet-section-border />
 
+            @if ($state->obstetrical_information)
             <div class="md:grid md:grid-cols-3 md:gap-6">
                 <div class="md:col-span-1 flex justify-between">
                     <div class="px-4 sm:px-0">
@@ -109,7 +110,9 @@
             </div>
 
             <x-jet-section-border />
+            @endif
 
+            @if ($state->medical_information)
             <div class="md:grid md:grid-cols-3 md:gap-6">
                 <div class="md:col-span-1 flex justify-between">
                     <div class="px-4 sm:px-0">
@@ -146,7 +149,9 @@
             </div>
 
             <x-jet-section-border />
+            @endif
 
+            @if ($state->pregnancy_information)
             <div class="md:grid md:grid-cols-3 md:gap-6">
                 <div class="md:col-span-1 flex justify-between">
                     <div class="px-4 sm:px-0">
@@ -188,7 +193,9 @@
             </div>
 
             <x-jet-section-border />
+            @endif
 
+            @if ($state->vitals)
             <div class="md:grid md:grid-cols-3 md:gap-6">
                 <div class="md:col-span-1 flex justify-between">
                     <div class="px-4 sm:px-0">
@@ -234,6 +241,7 @@
             </div>
 
             <x-jet-section-border />
+            @endif
         </div>
     </div>
 </x-app-layout>
