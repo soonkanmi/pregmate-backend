@@ -30,6 +30,7 @@ Route::middleware([
     })->name('dashboard');
 
     Route::get('/users', User::class)->name('users.list');
+    Route::get('/users/{id}/view-record', [User::class, 'viewRecord'])->name('users.record');
     Route::get('/doctors', Doctor::class)->name('doctors.list');
     Route::get('/administrators', Administrator::class)->name('administrators.list');
 });

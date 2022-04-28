@@ -2,12 +2,15 @@
 
 namespace App\Http\Livewire;
 
+use Exception;
 use Livewire\Component;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Models\User as ModelsUser;
-use App\Notifications\UserWelcomeEmailNotification;
-use Exception;
 use Illuminate\Support\Facades\Hash;
+use App\Notifications\UserWelcomeEmailNotification;
+use Illuminate\Support\Facades\Validator;
+use Laravel\Fortify\Contracts\UpdatesUserPasswords;
 
 class User extends Component
 {
@@ -17,10 +20,33 @@ class User extends Component
     public $confirmingDelete = 0;
     public $confirmRecordId = null;
 
+    /**
+     * The component's state.
+     *
+     * @var array
+     */
+    public $state = null;
+
+    public $saved = false;
+
     public function render()
     {
-        $this->users = ModelsUser::isUser()->isActive()->get();
+        $this->users = ModelsUser::isUser()->get();
         return view('livewire.user.index');
+    }
+
+    public function showRecord($id)
+    {
+        return redirect(route('users.record', ['id' => encrypt($id)]));
+    }
+
+    public function viewRecord($id)
+    {
+        $rid = decrypt($id);
+
+        $this->state = ModelsUser::isUser()->find($rid);
+
+        return view('livewire.user.show', ['state' => $this->state]);
     }
 
     public function create()
@@ -126,6 +152,7 @@ class User extends Component
     public function view($id)
     {
         $user = ModelsUser::findOrFail($id);
+        $this->user_id = $id;
         $this->name = $user->name;
         $this->email = $user->email;
         $this->phone = $user->phone;
@@ -148,4 +175,35 @@ class User extends Component
         $this->confirmRecordId = $id;
         $this->confirmingDelete = true;
     }
+
+    /**
+     * Update the user's password.
+     *
+     * @param  \Laravel\Fortify\Contracts\UpdatesUserPasswords  $updater
+     * @return void
+     */
+    // public function updatePassword()
+    // {
+    //     $this->resetErrorBag();
+
+    //     $this->validate($this->state, [
+    //         'password' => 'required|confirmed'
+    //     ], [
+    //         'password.required' => 'New Password is required',
+    //         'password.confirmed' => 'Passwords does not match',
+    //     ]);
+
+    //     // dd($validator->failed());
+
+    //     User::find($this->user_id)->update([
+    //         'password' => Hash::make($this->state['password'])
+    //     ]);
+
+    //     $this->state = [
+    //         'password' => '',
+    //         'password_confirmation' => '',
+    //     ];
+
+    //     $this->emit('saved');
+    // }
 }
