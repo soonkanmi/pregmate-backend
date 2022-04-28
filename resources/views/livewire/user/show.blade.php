@@ -42,6 +42,7 @@
                                 <x-jet-input id="phone" type="text" class="mt-1 block w-full" readonly value="{{ $state->phone }}" />
                             </div>
 
+                            @if ($state->obstetrical_information)
                             <div class="col-span-6 sm:col-span-4">
                                 <x-jet-label for="date_of_birth" value="{{ __('Date of Birth') }}" />
                                 <x-jet-input id="date_of_birth" type="text" class="mt-1 block w-full" readonly value="{{ $state->personal_information->date_of_birth }}" />
@@ -61,6 +62,7 @@
                                 <x-jet-label for="next_of_kin" value="{{ __('Next of Kin') }}" />
                                 <x-jet-input id="next_of_kin" type="text" class="mt-1 block w-full" readonly value="{{ $state->personal_information->next_of_kin }}" />
                             </div>
+                            @endif
                         </div>
                     </div>
                 </div>
